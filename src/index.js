@@ -8,6 +8,7 @@ function createLandMiddleware(land) {
         }
       }
     }
+    next(action);
   };
 }
 
