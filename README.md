@@ -12,6 +12,7 @@ yarn add redux-land
 
 - dispatch multiple actions with [async-generator-functions](https://github.com/tc39/proposal-async-iteration)
 - intuitive (**important!**)
+- type safe (with typescript. you can see [example](https://github.com/KoyamaSohei/redux-land-example))
 
 ## Usage
 
@@ -20,8 +21,8 @@ import { createStore, applyMiddleware } from 'redux';
 import createLandMiddleware from 'redux-land';
 
 // action types 
-const INCC      = "INCC";
-const ASYNCINCC = "ASYNCINCC";
+const INC      = "INC";
+const ASYNCINC = "ASYNCINC";
 
 // reducer
 const reducer = (state = {counter: 0}, action) => {
@@ -37,26 +38,25 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-const asyncIncc = async function* ({state,action}) {
+const asyncInc = async function* ({state,action}) {
   await sleep(1000);
-  yield await {type: INCC}; // this action will be dispatched.
+  yield await {type: INC}; // this action will be dispatched.
   await sleep(action.payload);
-  yield await {type: INCC};// you can dispatch action, any number of times
+  yield await {type: INC};// you can dispatch action, any number of times
 }
 
 
 const landMiddleware = createLandMiddleware({
-  [ASYNCINCC] : asyncIncc, // object-with-dynamic-keys
+  [ASYNCINC] : asyncInc, // object-with-dynamic-keys
 });
 
 const store = createStore(reducer,applyMiddleware(landMiddleware));
 
 // later
 dispatch({
-  type: ASYNCINCC,
+  type: ASYNCINC,
   payload: 3000,
 });
-
 
 ```
 
