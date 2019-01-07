@@ -1,8 +1,10 @@
 redux-land
 =============
 
-intuitive middleware for redux.
+intuitive middleware for redux.  
 
+[![Build Status](https://travis-ci.org/KoyamaSohei/redux-land.svg?branch=master)](https://travis-ci.org/KoyamaSohei/redux-land) 
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 ```js
 yarn add redux-land
