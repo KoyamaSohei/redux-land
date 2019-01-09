@@ -90,14 +90,74 @@ describe("land middleware", async () => {
 
       const store = createStore(reducer, applyMiddleware(landMiddleware));
       expect(store.getState()).toBe(0);
-      store.dispatch({type: FIRST});
+      store.dispatch({ type: FIRST });
       setTimeout(() => {
         expect(store.getState()).toBe("A");
       }, 0);
-      store.dispatch({type: SECOND});
+      store.dispatch({ type: SECOND });
       setTimeout(() => {
         expect(store.getState()).toBe("B");
       }, 0);
+    });
+
+    it("dispatched action's order", async () => {
+      function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      }
+      const type = {
+        main: "MAIN",
+        TOB: "TOB",
+        TOC: "TOC",
+        FLAG: "FLAG",
+        FINISH: "FINISH"
+      };
+      const main = async function*({ state, action }) {
+        yield {
+          type: type.TOB
+        };
+        yield {
+          type: type.TOC
+        };
+      };
+      const toB = async function*({ state, action }) {
+        sleep(1000);
+        yield {
+          type: type.FLAG
+        };
+      };
+      const toC = async function*({ state, action }) {
+        yield {
+          type: type.TOC
+        };
+      };
+      const reducer = (state = { flag: false, finish: false }, action) => {
+        switch (action.type) {
+          case type.FLAG:
+            return { ...state, flag: true };
+          case type.FINISH:
+            return { ...state, finish: true };
+          default:
+            return state;
+        }
+      };
+      const landMiddleware = createLandMiddleware({
+        [type.MAIN]: main,
+        [type.TOB]: toB,
+        [type.TOC]: toC
+      });
+      const store = createStore(reducer, applyMiddleware(landMiddleware));
+      store.subscribe(() => {
+        const state = store.getState();
+        if(state.flag) {
+          expect(state.flag).toBe(false);
+        }
+        if (state.finish) {
+          expect(state.flag).toBe(true);
+        }
+      });
+      store.dispatch({
+        type: type.MAIN
+      });
     });
   });
 });
