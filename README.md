@@ -29,7 +29,7 @@ const ASYNCINC = "ASYNCINC";
 // reducer
 const reducer = (state = {counter: 0}, action) => {
   switch(action.type){
-    case INCC:
+    case INC:
       return {...state, counter: state.counter + 1 }
     default:
       return {...state}
@@ -55,7 +55,7 @@ const landMiddleware = createLandMiddleware({
 const store = createStore(reducer,applyMiddleware(landMiddleware));
 
 // later
-dispatch({
+store.dispatch({
   type: ASYNCINC,
   payload: 3000,
 });
