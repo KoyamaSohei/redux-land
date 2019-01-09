@@ -42,9 +42,9 @@ function sleep(ms) {
 
 const asyncInc = async function* ({state,action}) {
   await sleep(1000);
-  yield await {type: INC}; // this action will be dispatched.
+  yield {type: INC}; // this action will be dispatched.
   await sleep(action.payload);
-  yield await {type: INC};// you can dispatch action, any number of times
+  yield {type: INC};// you can dispatch action, any number of times
 }
 
 

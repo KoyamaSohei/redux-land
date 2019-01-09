@@ -27,7 +27,7 @@ describe("land middleware", async () => {
 
   it("dispatch action in middleware", async () => {
     const asyncFoo = async function*({ state, action }) {
-      yield await { type: "FOO" };
+      yield { type: "FOO" };
     };
     const ASYNCFOO = "ASYNCFOO";
     const landMiddleware = createLandMiddleware({
@@ -57,7 +57,7 @@ describe("land middleware", async () => {
       const SECOND = "SECOND";
 
       const first = async function*({ state, action }) {
-        yield await {
+        yield {
           type: "A"
         };
       };
@@ -65,7 +65,7 @@ describe("land middleware", async () => {
         [FIRST]: first
       };
       const second = async function*({ state, action }) {
-        yield await {
+        yield {
           type: "B"
         };
       };
