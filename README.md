@@ -96,7 +96,7 @@ export enum LandActionType {
   LOAD = "LOAD"
 }
 
-export type LOAD = Action<LandType.LOAD> & {
+export type LOAD = Action<LandActionType.LOAD> & {
   payload: string;
 };
 
@@ -129,7 +129,7 @@ const load: Land<State, LOAD, Actions> = async function*({ state, action }) {
 };
 
 const lands : Lands = {
-  [LandType.LOAD]: load
+  [LandActionType.LOAD]: load
 }
 
 const middleware = createLandMiddleware(lands);
@@ -161,7 +161,7 @@ import { LandActionType } from "./types";
 
 store.dispatch({
   type: LandActionType.LOAD,
-  payload: "https://www.npmjs.com/package/redux-land"
+  payload: "https://www.sample.com/"
 });
 ```
 
