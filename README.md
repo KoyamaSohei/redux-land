@@ -159,7 +159,10 @@ index.ts
 import store from "./module";
 import { LandActionType } from "./types";
 
-store.dispatch({type: LandActionType.LOAD});
+store.dispatch({
+  type: LandActionType.LOAD,
+  payload: "https://www.npmjs.com/package/redux-land"
+});
 ```
 
 ## License
