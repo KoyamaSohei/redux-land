@@ -64,6 +64,99 @@ store.dispatch({
 
 ```
 
+## Usage (TypeScript)
+
+types.ts
+```ts
+import { Action } from "redux";
+
+export type State = {
+  loaded: boolean;
+  status: boolean;
+};
+
+export enum ActionType {
+  LOADING = "LOADING",
+  LOADED  = "LOADED",
+  SUCCESS = "SUCCESS",
+  FAILED  = "FAILED",
+}
+
+export type LOADING = Action<ActionType.LOADING>;
+export type LOADED  = Action<ActionType.LOADED>;
+export type SUCCESS = Action<ActionType.SUCCESS>;
+export type FAILED  = Action<ActionType.FAILED>;
+
+export enum LandActionType {
+  LOAD = "LOAD"
+}
+
+export type LOAD = Action<LandType.LOAD> & {
+  payload: string;
+};
+
+export type Actions = LOADING | LOADED | SUCCESS | FAILED | LOAD;
+```
+
+module.ts
+
+```ts
+import { createStore, applyMiddleware } from "redux";
+import createLandMiddleware, { Land } from "redux-land";
+import axios from "axios";
+import {
+  State,
+  ActionType,
+  Actions,
+  LandActionType,
+  LOAD
+} from "./types";
+
+const load: Land<State, LOAD, Actions> = async function*({ state, action }) {
+  yield {type: ActionType.LOADING};
+  const status = (await axios(action.payload)).status;
+  if (status >= 200 && status < 300) {
+    yield {type: ActionType.SUCCESS};
+  } else {
+    yield {type: ActionType.FAILED};
+  }
+  yield {type: ActionType.LOADED};
+};
+
+const lands : Lands = {
+  [LandType.LOAD]: load
+}
+
+const middleware = createLandMiddleware(lands);
+
+const reducer = (state: State = { loaded: true, status: true }, action: Actions) => {
+  switch (action.type) {
+    case ActionType.LOADING:
+      return { ...state, loaded: false };
+    case ActionType.LOADED:
+      return { ...state, loaded: true };
+    case ActionType.SUCCESS:
+      return { ...state, status: true };
+    case ActionType.FAILED:
+      return { ...state, status: false };
+    default:
+      return state;
+  }
+};
+
+const store = createStore(reducer, applyMiddleware(middleware));
+
+export default store;
+```
+
+index.ts
+```ts
+import store from "./module";
+import { LandActionType } from "./types";
+
+store.dispatch({type: LandActionType.LOAD});
+```
+
 ## License
 
 MIT
