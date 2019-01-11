@@ -102,7 +102,7 @@ module.ts
 
 ```ts
 import { createStore, applyMiddleware } from "redux";
-import createLandMiddleware, { Land } from "redux-land";
+import createLandMiddleware, { Land, Lands } from "redux-land";
 import axios from "axios";
 import {
   State,
