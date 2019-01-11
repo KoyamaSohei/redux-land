@@ -12,10 +12,15 @@ intuitive middleware for redux.
 yarn add redux-land
 ```
 
+or 
+
+```
+npm install --save redux-land
+```
+
 ## Features
 
 - dispatch multiple actions with [async-generator-functions](https://github.com/tc39/proposal-async-iteration)
-- intuitive (**important!**)
 - type safe (with typescript. you can see [example](https://github.com/KoyamaSohei/redux-land-example))
 
 ## Usage
