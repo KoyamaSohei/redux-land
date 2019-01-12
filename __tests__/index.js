@@ -25,7 +25,7 @@ describe("land middleware", async () => {
     expect(store.getState()).toBe(1);
   });
 
-  it("dispatch action in middleware", async () => {
+  it("dispatch action in middleware", async (done) => {
     const asyncFoo = async function*({ state, action }) {
       yield { type: "FOO" };
     };
@@ -48,11 +48,12 @@ describe("land middleware", async () => {
     });
     setTimeout(() => {
       expect(store.getState()).toBe(1);
+      done();
     }, 0);
   });
-
+  
   describe("advanced usage", async () => {
-    it("combine lands", async () => {
+    it("combine lands", async (done) => {
       const FIRST = "FIRST";
       const SECOND = "SECOND";
 
@@ -92,20 +93,22 @@ describe("land middleware", async () => {
       expect(store.getState()).toBe(0);
       store.dispatch({ type: FIRST });
       setTimeout(() => {
-        expect(store.getState()).toBe("A");
-      }, 0);
-      store.dispatch({ type: SECOND });
+        expect(store.getState()).toBe(1);
+        store.dispatch({ type: SECOND });
+      }, 100);
+      
       setTimeout(() => {
-        expect(store.getState()).toBe("B");
-      }, 0);
+        expect(store.getState()).toBe(2);
+        done();
+      }, 200);
     });
 
-    it("dispatched action's order", async () => {
+    it("dispatched action's order", async (done) => {
       function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
       }
       const type = {
-        main: "MAIN",
+        MAIN: "MAIN",
         TOB: "TOB",
         TOC: "TOC",
         FLAG: "FLAG",
@@ -127,7 +130,7 @@ describe("land middleware", async () => {
       };
       const toC = async function*({ state, action }) {
         yield {
-          type: type.TOC
+          type: type.FINISH
         };
       };
       const reducer = (state = { flag: false, finish: false }, action) => {
@@ -148,9 +151,6 @@ describe("land middleware", async () => {
       const store = createStore(reducer, applyMiddleware(landMiddleware));
       store.subscribe(() => {
         const state = store.getState();
-        if(state.flag) {
-          expect(state.flag).toBe(false);
-        }
         if (state.finish) {
           expect(state.flag).toBe(true);
         }
@@ -158,6 +158,7 @@ describe("land middleware", async () => {
       store.dispatch({
         type: type.MAIN
       });
+      setTimeout(done,4000);
     });
   });
 });
