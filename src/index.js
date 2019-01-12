@@ -1,10 +1,14 @@
-function createLandMiddleware(land, dependencies = {}) {
-  return ({ getState }) => next => async action => {
+function createLandMiddleware(lands, dependencies = {}) {
+  return ({ getState, dispatch }) => next => async action => {
     const state = getState();
-    for (const type in land) {
+    for (const type in lands) {
       if (action.type == type) {
-        for await (const ac of land[type]({ state, action }, dependencies)) {
-          next(ac);
+        const itr = lands[type]({ state, action }, dependencies);
+        let _done = false;
+        while (!_done) {
+          const {value, done} = await itr.next();
+          if (!done) dispatch(value);
+          _done = done;
         }
       }
     }
