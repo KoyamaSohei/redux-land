@@ -165,6 +165,42 @@ store.dispatch({
 });
 ```
 
+## Injecting Dependencies
+
+module.ts
+```ts
+...
+
+type Dep = {
+  axios: typeof axios
+}
+
+const load: Land<State, LOAD, Actions, Dep> = async function*({ state, action }, { axios }) { ...
+
+export const lands : Lands = { ...
+...
+
+const middleware = createLandMiddleware(lands, { axios });// injecting dependencies
+
+export const reducer = ...;
+
+...
+```
+
+\_\_tests__/module.spec.ts
+```ts
+...
+
+import { lands } from '../module';
+const middleware = createLandMiddleware(lands, {
+  axios: (url: string) => Promise.resolve({
+    status: 200,// you can test `load` independently on success.
+  }),
+});
+
+...
+```
+
 ## License
 
 MIT
