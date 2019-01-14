@@ -119,12 +119,16 @@ import {
 
 const load: Land<State, LOAD, Actions> = async function*({ state, action }) {
   yield {type: ActionType.LOADING};
-  const status = (await axios(action.payload)).status;
-  if (status >= 200 && status < 300) {
-    yield {type: ActionType.SUCCESS};
-  } else {
+  try {
+    const { status } = (await axios(action.payload));
+    if (status >= 200 && status < 300) {
+      yield {type: ActionType.SUCCESS};
+    } else {
+      yield {type: ActionType.FAILED};
+    }
+  } catch {
     yield {type: ActionType.FAILED};
-  }
+  }  
   yield {type: ActionType.LOADED};
 };
 
