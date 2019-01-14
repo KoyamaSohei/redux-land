@@ -1,5 +1,6 @@
 function createLandMiddleware(lands, dependencies = {}) {
   return ({ getState, dispatch }) => next => async action => {
+    next(action);
     const state = getState();
     for (const type in lands) {
       if (action.type == type) {
@@ -12,7 +13,6 @@ function createLandMiddleware(lands, dependencies = {}) {
         }
       }
     }
-    next(action);
   };
 }
 
