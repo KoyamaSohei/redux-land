@@ -128,11 +128,11 @@ const load: Land<State, LOAD, Actions> = async function*({ state, action }) {
   yield {type: ActionType.LOADED};
 };
 
-const lands : Lands = {
+const lands : Lands<typeof LandActionType, State> = {
   [LandActionType.LOAD]: load
 }
 
-const middleware = createLandMiddleware(lands);
+const middleware = createLandMiddleware<typeof LandActionType>(lands);
 
 const reducer = (state: State = { loaded: true, status: true }, action: Actions) => {
   switch (action.type) {
