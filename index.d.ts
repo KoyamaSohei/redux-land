@@ -2,7 +2,7 @@ import { Middleware, AnyAction, Dispatch, Store } from "redux";
 
 export type Land<State, Action extends AnyAction,O = AnyAction,Dependencies = any> = (
   args: { state: State; action: Action },
-  dependencies: Dependencies
+  dependencies?: Dependencies
 ) => AsyncIterableIterator<O>;
 
 export type Lands<T = any, S = any> = {
