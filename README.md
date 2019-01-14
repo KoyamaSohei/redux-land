@@ -198,11 +198,34 @@ export const reducer = ...;
 import { lands } from '../module';
 const middleware = createLandMiddleware(lands, {
   axios: (url: string) => Promise.resolve({
-    status: 200,// you can test `load` independently on success.
+    status: 200,// you can test on success.
   }),
 });
 
 ...
+```
+For unit test
+```ts
+...
+
+const itr = load({
+  state: {
+    loaded: true,
+    status: true,
+  },
+  action: {
+    type: LandActionType.LOAD,
+    payload: "https://www.sample.com/",
+  },
+},{
+  axios: (url: string) => Promise.resolve({
+    status: 200,// you can test on success.
+  }),
+});
+const {value} = await itr.next();
+expect(value).toEqual({type: ActionType.LOADING});
+...
+
 ```
 
 ## License
