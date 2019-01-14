@@ -5,12 +5,12 @@ export type Land<State, Action extends AnyAction,O = AnyAction,Dependencies = an
   dependencies: Dependencies
 ) => AsyncIterableIterator<O>;
 
-export type Lands = {
-  [key: string]: Land<any, any, any>;
+export type Lands<T = any, S = any> = {
+  [key in keyof T]: Land<S, any, any, any>;
 };
 
-export declare function createLandMiddleware(
-  lands: Lands,
+export declare function createLandMiddleware<T>(
+  lands: Lands<T>,
   dependencies?: {
     [key: string]: any;
   }
