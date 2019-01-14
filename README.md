@@ -132,7 +132,7 @@ const load: Land<State, LOAD, Actions> = async function*({ state, action }) {
   yield {type: ActionType.LOADED};
 };
 
-const lands : Lands<typeof LandActionType, State> = {
+const lands : Lands<typeof LandActionType, State, LOAD, Actions, Dep> = {
   [LandActionType.LOAD]: load
 }
 
@@ -181,7 +181,7 @@ type Dep = {
 
 const load: Land<State, LOAD, Actions, Dep> = async function*({ state, action }, { axios }) { ...
 
-export const lands : Lands = { ...
+export const lands : Lands<typeof LandActionType, State, LOAD, Actions, Dep> = { ...
 ...
 
 const middleware = createLandMiddleware(lands, { axios });// injecting dependencies
