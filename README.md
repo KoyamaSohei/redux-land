@@ -169,7 +169,7 @@ store.dispatch({
 });
 ```
 
-## Injecting Dependencies
+## Dependency Injection
 
 module.ts
 ```ts
@@ -184,7 +184,7 @@ const load: Land<State, LOAD, Actions, Dep> = async function*({ state, action },
 export const lands : Lands<typeof LandActionType, State, LOAD, Actions, Dep> = { ...
 ...
 
-const middleware = createLandMiddleware(lands, { axios });// injecting dependencies
+const middleware = createLandMiddleware(lands, { axios });
 
 export const reducer = ...;
 
