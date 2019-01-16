@@ -51,6 +51,36 @@ describe("land middleware", async () => {
       done();
     }, 0);
   });
+
+  it("Dependency Injection", (done) => {
+    const asyncFoo = async function*({ state, action },{ bar }) {
+      yield bar();
+    };
+    const ASYNCFOO = "ASYNCFOO";
+    const bar = () => ({type: "BAR"});
+    const landMiddleware = createLandMiddleware({
+      [ASYNCFOO]: asyncFoo
+    }, { bar });
+    const reducer = (state = 0, action) => {
+      switch (action.type) {
+        case "FOO":
+          return 1;
+        case "BAR":
+          return 2;
+        default:
+          return state;
+      }
+    };
+    const store = createStore(reducer, applyMiddleware(landMiddleware));
+    expect(store.getState()).toBe(0);
+    store.dispatch({
+      type: ASYNCFOO
+    });
+    setTimeout(() => {
+      expect(store.getState()).toBe(2);
+      done();
+    }, 0);
+  })
   
   describe("advanced usage", async () => {
     it("combine lands", async (done) => {
