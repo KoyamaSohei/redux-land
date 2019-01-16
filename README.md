@@ -132,7 +132,7 @@ const load: Land<State, LOAD, Actions> = async function*({ state, action }) {
   yield {type: ActionType.LOADED};
 };
 
-const lands : Lands<typeof LandActionType, State, LOAD, Actions, Dep> = {
+const lands : Lands<typeof LandActionType, State, LOAD, Actions> = {
   [LandActionType.LOAD]: load
 }
 
