@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware } from "redux";
 import createLandMiddleware from "../src/index";
 
-describe("land middleware", async () => {
+describe("land middleware", () => {
   it("must return function", async () => {
     const landMiddleware = createLandMiddleware();
     const nextHandler = landMiddleware({ getState: {} });
@@ -81,8 +81,8 @@ describe("land middleware", async () => {
       done();
     }, 0);
   })
-  
-  describe("advanced usage", async () => {
+
+  describe("advanced usage", () => {
     it("combine lands", async (done) => {
       const FIRST = "FIRST";
       const SECOND = "SECOND";
@@ -126,7 +126,7 @@ describe("land middleware", async () => {
         expect(store.getState()).toBe(1);
         store.dispatch({ type: SECOND });
       }, 100);
-      
+
       setTimeout(() => {
         expect(store.getState()).toBe(2);
         done();
